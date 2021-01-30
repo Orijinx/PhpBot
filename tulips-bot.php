@@ -1,5 +1,5 @@
 <?php
-include('vendor/autoload.php'); //Подключаем библиотеку
+include 'vendor/autoload.php'; //Подключаем библиотеку
 use Telegram\Bot\Api;
 
 class DB
@@ -18,7 +18,7 @@ class DB
         $arr = array("type" => []);
         $json = json_encode($arr);
         $this->mysqli->query("INSERT INTO TeleBot(chatId,jOrder) VALUES ($chatId,'$json')");
-        return TRUE;
+        return true;
     }
     public function getUserByChatId($chatId)
     {
@@ -122,6 +122,12 @@ if (($command == "0") || ($command == null)) {
             $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
             $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
         } elseif ($text == "Собрать заказ") {
+            $user = $db->getUserByChatId($chat_id);
+            if(($user->Phone == null)||($user->Name == null)){
+                $reply = 'Перед оформлением заказа, пожалуйста, заполните контактную информацию в разделе "Настройки пользователя"!';
+                $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+                $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
+            }
             $reply = "Выберите цвет.\nЕсли вам нужно несколько - нажмите соответствующую кнопку.";
             $db->SetCommand("3", $chat_id);
             $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $t_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
@@ -130,12 +136,22 @@ if (($command == "0") || ($command == null)) {
             $telegram->sendMessage(['chat_id' => $chat_id, 'text' => "Отправьте текстовое сообщение."]);
         }
     }
-} elseif ($command == "1") {
+} elseif (($command == "1") || ($command == "12")) {
     $db->SetUserName($text, $chat_id);
     $reply = "Ваше новое имя : $text";
-    $db->SetCommand("0", $chat_id);
-    $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $u_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
-    $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
+    if ($command == "1") {
+        $db->SetCommand("0", $chat_id);
+        $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $u_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+        $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
+    }
+    // else{
+    //     if($db->getUserByChatId($chat_id)->Phone==null){
+
+    //     }
+    //     $db->SetCommand("42", $chat_id);
+    //     $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+    //     $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);       
+    // }
 } elseif (($command == "3") || ($command == "31")) {
     if ($text == "Выбрать несколько") {
         $reply = "Выберите цвета:";
@@ -190,97 +206,19 @@ if (($command == "0") || ($command == null)) {
         $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
     }
-} elseif ($command == "4") {
+} elseif (($command == "4")) {
     $db->SetValue($text, $chat_id);
     $reply = "Заказ сформирован!";
     $db->SetCommand("0", $chat_id);
     $user = $db->getUserByChatId($chat_id);
-    $reply_t="";
-    foreach ($db->GetOrder($chatId) as $key) {
-        if($key==1){
-            $reply_t.="Зеленые ";
-        }
-        if($key==2){
-            $reply_t.="Желтые ";
-        }
-        if($key==3){
-            $reply_t.="Красные ";
-        }
-    }
     $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $s_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
     $telegram
-   ->setAsyncRequest(true)
-   ->sendMessage(['chat_id' => "980196074", 'text' => "Новый заказ!\n Имя:$user->Name\nЗаказ: $user->jOrder\nКоличество:$user->value", 'reply_markup' => $reply_markup]);
+        ->setAsyncRequest(true)
+        ->sendMessage(['chat_id' => "980196074", 'text' => "Новый заказ!\n Имя:$user->Name\nЗаказ: $user->jOrder\nКоличество:$user->value", 'reply_markup' => $reply_markup]);
     $telegram->sendMessage(['chat_id' => $chat_id, 'text' => "Заказ получен!\n", 'reply_markup' => $reply_markup]);
     //$telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
 }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 //     elseif ($text == "/help") {
 //         $reply = "Информация с помощью.";
 //         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply]);
