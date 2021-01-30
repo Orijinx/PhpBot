@@ -117,16 +117,22 @@ if (($command == "0") || ($command == null)) {
             $db->SetCommand("1", $chat_id);
             $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $em_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
             $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
-        } elseif ($text == "Главное меню") {
+        }elseif ($text == "Изменить телефон") {
+            $reply = "Оставьте ваш контактный телефон для связи:";
+            $db->SetCommand("2", $chat_id);
+            $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $em_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+            $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
+        }  elseif ($text == "Главное меню") {
             $reply = "Главное меню:";
             $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
             $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
         } elseif ($text == "Собрать заказ") {
             $user = $db->getUserByChatId($chat_id);
-            if(($user->Phone == null)||($user->Name == null)){
+            if (($user->Phone == null) || ($user->Name == null)) {
                 $reply = 'Перед оформлением заказа, пожалуйста, заполните контактную информацию в разделе "Настройки пользователя"!';
                 $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
                 $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
+                exit;
             }
             $reply = "Выберите цвет.\nЕсли вам нужно несколько - нажмите соответствующую кнопку.";
             $db->SetCommand("3", $chat_id);
@@ -139,19 +145,16 @@ if (($command == "0") || ($command == null)) {
 } elseif (($command == "1") || ($command == "12")) {
     $db->SetUserName($text, $chat_id);
     $reply = "Ваше новое имя : $text";
-    if ($command == "1") {
-        $db->SetCommand("0", $chat_id);
-        $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $u_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
-        $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
-    }
-    // else{
-    //     if($db->getUserByChatId($chat_id)->Phone==null){
+    $db->SetCommand("0", $chat_id);
+    $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $u_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+    $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
 
-    //     }
-    //     $db->SetCommand("42", $chat_id);
-    //     $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
-    //     $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);       
-    // }
+} elseif (($command == "2")) {
+    $db->SetUserPhone($text, $chat_id);
+    $reply = "Ваше телефон : $text";
+    $db->SetCommand("0", $chat_id);
+    $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $u_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+    $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
 } elseif (($command == "3") || ($command == "31")) {
     if ($text == "Выбрать несколько") {
         $reply = "Выберите цвета:";
