@@ -290,22 +290,23 @@ if (($command == "0") || ($command == null)) {
         ->sendMessage(['chat_id' => "620096189", 'text' => "Новый заказ!\n Имя:$user->Name\nЗаказ: $user->jOrder\nКоличество:$user->Value", 'reply_markup' => $reply_markup]);
     $telegram->sendMessage(['chat_id' => $chat_id, 'text' => "Заказ получен!\n", 'reply_markup' => $reply_markup]);
     //$telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
-} elseif (($command == "5")) {
-    $db->SetValue($text, $chat_id);
-    $reply = "Заказ сформирован!";
-    $db->SetCommand("0", $chat_id);
-    $user = $db->getUserByChatId($chat_id);
-    $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $s_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
-    SendMessage::Send("Новый заказ!\n Имя:$user->Name\nЗаказ: $user->jOrder\nКоличество:$user->Value");
-    $telegram
-        ->setAsyncRequest(true)
-        ->sendMessage(['chat_id' => "441239846", 'text' => "Новый заказ!\n Имя:$user->Name\nЗаказ: $user->jOrder\nКоличество:$user->Value", 'reply_markup' => $reply_markup]);
-    $telegram
-        ->setAsyncRequest(true)
-        ->sendMessage(['chat_id' => "620096189", 'text' => "Новый заказ!\n Имя:$user->Name\nЗаказ: $user->jOrder\nКоличество:$user->Value", 'reply_markup' => $reply_markup]);
-    $telegram->sendMessage(['chat_id' => $chat_id, 'text' => "Заказ получен!\n", 'reply_markup' => $reply_markup]);
-    //$telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
-}
+ } 
+//elseif (($command == "5")) {
+//     $db->SetValue($text, $chat_id);
+//     $reply = "Заказ сформирован!";
+//     $db->SetCommand("0", $chat_id);
+//     $user = $db->getUserByChatId($chat_id);
+//     $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $s_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+//     SendMessage::Send("Новый заказ!\n Имя:$user->Name\nЗаказ: $user->jOrder\nКоличество:$user->Value");
+//     $telegram
+//         ->setAsyncRequest(true)
+//         ->sendMessage(['chat_id' => "441239846", 'text' => "Новый заказ!\n Имя:$user->Name\nЗаказ: $user->jOrder\nКоличество:$user->Value", 'reply_markup' => $reply_markup]);
+//     $telegram
+//         ->setAsyncRequest(true)
+//         ->sendMessage(['chat_id' => "620096189", 'text' => "Новый заказ!\n Имя:$user->Name\nЗаказ: $user->jOrder\nКоличество:$user->Value", 'reply_markup' => $reply_markup]);
+//     $telegram->sendMessage(['chat_id' => $chat_id, 'text' => "Заказ получен!\n", 'reply_markup' => $reply_markup]);
+//     //$telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
+// }
 
 //     elseif ($text == "/help") {
 //         $reply = "Информация с помощью.";
