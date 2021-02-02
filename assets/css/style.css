@@ -1,0 +1,19 @@
+        body {
+            background: #e0e0e0;
+        }
+        
+        header {
+            height: 200px;
+            -webkit-box-shadow: 1px 27px 21px 0px rgba(0, 0, 0, 0.63);
+            -moz-box-shadow: 1px 27px 21px 0px rgba(0, 0, 0, 0.63);
+            box-shadow: 1px 27px 21px 0px rgba(0, 0, 0, 0.63);
+        }
+        
+        nav li {
+            display: inline;
+            list-style: none;
+            padding: 10px;
+            border-radius: 50px;
+            background: #e0e0e0;
+            box-shadow: -20px 20px 60px #8d8d8d, 20px -20px 60px #ffffff;
+        }
