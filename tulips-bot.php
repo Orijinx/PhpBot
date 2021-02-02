@@ -170,7 +170,14 @@ if (($command == "0") || ($command == null)) {
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
     } elseif ($text == "🟩Зеленые") {
         $order = $db->GetOrder($chat_id);
-        array_push($order->type, "Зеленые");
+        if (in_array( "🟩Зеленые",$order->type)){
+            array_push($order->type, "🟩Зеленые");
+            $reply = "Вы уже выбрали данный цвет!";
+            $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+            $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
+            exit;
+        }
+        array_push($order->type, "🟩Зеленые");
         $db->AddOrder($order, $chat_id);
         if ($command == "3") {
             $reply = "Введите количество:";
@@ -178,13 +185,21 @@ if (($command == "0") || ($command == null)) {
             $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
             $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
         } else {
+            $ntm_key_board;
             $reply = "Добавлен зеленый!:";
             $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $tm_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
             $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
         }
     } elseif ($text == "🟨Желтые") {
         $order = $db->GetOrder($chat_id);
-        array_push($order->type, "Желтые");
+        if (in_array( "🟨Желтые",$order->type)){
+            array_push($order->type, "🟨Желтые");
+            $reply = "Вы уже выбрали данный цвет!";
+            $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+            $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
+            exit;
+        }
+        array_push($order->type, "🟨Желтые");
         $db->AddOrder($order, $chat_id);
         if ($command == "3") {
             $reply = "Введите количество:";
@@ -198,7 +213,14 @@ if (($command == "0") || ($command == null)) {
         }
     } elseif ($text == "🌷Красные") {
         $order = $db->GetOrder($chat_id);
-        array_push($order->type, "Красные");
+        if (in_array( "🌷Красные",$order->type)){
+            array_push($order->type, "🌷Красные");
+            $reply = "Вы уже выбрали данный цвет!";
+            $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+            $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
+            exit;
+        }
+        array_push($order->type, "🌷Красные");
         $db->AddOrder($order, $chat_id);
         if ($command == "3") {
             $reply = "Введите количество:";
@@ -217,6 +239,17 @@ if (($command == "0") || ($command == null)) {
         $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
     }
 } elseif (($command == "4")) {
+    $db->SetValue($text, $chat_id);
+    $reply = "Заказ сформирован!";
+    $db->SetCommand("0", $chat_id);
+    $user = $db->getUserByChatId($chat_id);
+    $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $s_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
+    $telegram
+        ->setAsyncRequest(true)
+        ->sendMessage(['chat_id' => "980196074", 'text' => "Новый заказ!\n Имя:$user->Name\nЗаказ: $user->jOrder\nКоличество:$user->Value", 'reply_markup' => $reply_markup]);
+    $telegram->sendMessage(['chat_id' => $chat_id, 'text' => "Заказ получен!\n", 'reply_markup' => $reply_markup]);
+    //$telegram->sendMessage(['chat_id' => $chat_id, 'text' => $reply, 'reply_markup' => $reply_markup]);
+}elseif (($command == "5")) {
     $db->SetValue($text, $chat_id);
     $reply = "Заказ сформирован!";
     $db->SetCommand("0", $chat_id);
