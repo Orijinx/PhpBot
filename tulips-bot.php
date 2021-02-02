@@ -284,7 +284,7 @@ if (($command == "0") || ($command == null)) {
     $reply_markup = $telegram->replyKeyboardMarkup(['keyboard' => $s_keyboard, 'resize_keyboard' => true, 'one_time_keyboard' => false]);
     $telegram
         ->setAsyncRequest(true)
-        ->sendMessage(['chat_id' => "441239846", 'text' => "Новый заказ!\n Имя:$user->Name\nЗаказ: $user->jOrder\nКоличество:$user->Value", 'reply_markup' => $reply_markup]);
+        ->sendMessage(['chat_id' => "441239846", 'text' => "Новый заказ!\n Имя:$user->Name\nНомер:$user->Phone\nЗаказ: $user->jOrder\nКоличество:$user->Value", 'reply_markup' => $reply_markup]);
     $telegram
         ->setAsyncRequest(true)
         ->sendMessage(['chat_id' => "620096189", 'text' => "Новый заказ!\n Имя:$user->Name\nЗаказ: $user->jOrder\nКоличество:$user->Value", 'reply_markup' => $reply_markup]);
